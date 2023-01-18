@@ -1,10 +1,23 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap");
+
+:root {
+  --primary: #5899e8;
+  --primaryDark: #4c8ddc;
+  --black: #3c4043;
+  --gray: #5f6368;
+  --grayLight: #919199;
+  --grayLighter: #c3c4c5;
+  --light: #dadde0;
+  --lighter: #ecedee;
+}
+
 html,
 body {
-  background-color: #191919 !important;
-  color: #f8f9fa !important;
+  background-color: #feffff;
+  color: #272828;
   padding: 0;
   margin: 0;
+  font-size: 14px;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
   overflow-x: hidden;
@@ -30,136 +43,6 @@ ion-icon {
 .card-rate__responsive-bottom {
   display: none;
 }
-.calendar-top {
-  display: block;
-}
-.calendar-bottom {
-  display: none;
-}
-.react-calendar {
-  width: 350px;
-  max-width: 100%;
-  background: #d9d9d93b;
-  border: none !important;
-  font-family: Arial, Helvetica, sans-serif;
-  line-height: 1.125em;
-  padding: 1rem !important;
-  border-radius: 12px;
-}
-.react-calendar--doubleView {
-  width: 700px;
-}
-.react-calendar--doubleView .react-calendar__viewContainer {
-  display: flex;
-  margin: -0.5em;
-}
-.react-calendar--doubleView .react-calendar__viewContainer > * {
-  width: 50%;
-  margin: 0.5em;
-}
-.react-calendar,
-.react-calendar *,
-.react-calendar *:before,
-.react-calendar *:after {
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-}
-.react-calendar button {
-  margin: 0;
-  border: 0;
-  outline: none;
-  color: white;
-}
-.react-calendar button:enabled:hover {
-  cursor: pointer;
-}
-.react-calendar__navigation {
-  display: flex;
-  height: 44px;
-  margin-bottom: 1em;
-}
-.react-calendar__navigation button {
-  min-width: 44px;
-  background: none;
-}
-.react-calendar__navigation button:disabled {
-  background-color: #f0f0f0;
-}
-.react-calendar__navigation button:enabled:hover,
-.react-calendar__navigation button:enabled:focus {
-  background-color: #e6e6e6;
-}
-.react-calendar__month-view__weekdays {
-  text-align: center;
-  text-transform: uppercase;
-  font-weight: bold;
-  font-size: 0.75em;
-}
-.react-calendar__month-view__weekdays__weekday {
-  padding: 0.5em;
-}
-.react-calendar__month-view__weekNumbers .react-calendar__tile {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.75em;
-  font-weight: bold;
-}
-.react-calendar__month-view__days__day--weekend {
-  color: #9f0000 !important;
-}
-.react-calendar__month-view__days__day--neighboringMonth {
-  color: rgb(122, 122, 122) !important;
-}
-.react-calendar__year-view .react-calendar__tile,
-.react-calendar__decade-view .react-calendar__tile,
-.react-calendar__century-view .react-calendar__tile {
-  padding: 2em 0.5em;
-}
-.react-calendar__tile {
-  max-width: 100%;
-  padding: 10px 6.6667px;
-  background: none;
-  text-align: center;
-  line-height: 16px;
-}
-.react-calendar__tile:disabled {
-  background-color: #f0f0f0;
-}
-.react-calendar__tile:enabled:hover,
-.react-calendar__tile:enabled:focus {
-  background-color: #75757568;
-}
-.react-calendar__tile--hasActive {
-  background: #76baff;
-}
-.react-calendar__tile--hasActive:enabled:hover,
-.react-calendar__tile--hasActive:enabled:focus {
-  background: #a9d4ff;
-}
-.react-calendar__tile--active {
-  color: rgb(255, 238, 0);
-}
-.react-calendar__tile--active:enabled {
-  color: white !important;
-  background-color: #e05c1a;
-}
-.react-calendar--selectRange .react-calendar__tile--hover {
-  background-color: #e6e6e6;
-}
-
-.Calendar {
-  background-color: #3a3a3a !important;
-  width: 100% !important;
-}
-.Calendar__day {
-  color: white;
-}
-.Calendar__monthText,
-.Calendar__yearText {
-  color: white !important;
-}
 
 .landing {
   width: 90vw;
@@ -175,6 +58,8 @@ ion-icon {
   align-items: center;
   justify-content: center;
   font-size: 1.75rem;
+  color: var(--primary);
+  cursor: pointer;
 }
 
 .hamburgerBtn > svg,
@@ -191,7 +76,7 @@ ion-icon {
 }
 
 .landing__header {
-  border-bottom: 2px solid #3f3f46;
+  border-bottom: 1px solid var(--grayLighter);
 }
 
 .landing__header__nav {
@@ -200,7 +85,7 @@ ion-icon {
   top: 0;
   right: 0;
   width: 100%;
-  background-color: #202124;
+  background-color: var(--light);
 }
 
 .open-drawer {
@@ -237,16 +122,16 @@ ion-icon {
   padding: 0.75rem 1rem;
   border-radius: 0.25rem;
   width: fit-content;
-  background-color: #e05c1a;
+  background-color: var(--primary);
 }
 
 .nav-links a:hover {
-  color: #f58349;
+  color: #528dd6;
 }
 
 .nav-links .btn-login:hover {
   color: #fff;
-  background-color: #d44c08;
+  background-color: #528dd6;
 }
 
 .landing__hero {
@@ -266,27 +151,28 @@ ion-icon {
   font-size: 3rem;
   font-weight: bold;
   line-height: 1;
+  color: var(--black);
 }
 
 .landing__hero__subtitle {
-  color: #919199;
+  color: var(--gray);
 }
 
 .landing__hero__cta {
-  background-color: #e05c1a;
+  background-color: var(--primary);
   padding: 8px 20px;
   border-radius: 4px;
 }
 
 .landing__hero__cta:hover {
   color: #fff;
-  background-color: #d44c08;
+  background-color: var(--primaryDark);
 }
 
 .landing__image {
   display: flex;
   justify-content: center;
-  background: linear-gradient(138deg, #f58349, #f5a549);
+  background: linear-gradient(138deg, var(--primary), #3ce7d0);
   border-radius: 4px;
   backdrop-filter: blur(1px);
 }
@@ -318,10 +204,11 @@ ion-icon {
   font-weight: bold;
   line-height: 1;
   text-align: center;
+  color: var(--black);
 }
 
 .landing__feature > .subtitle {
-  color: #919199;
+  color: var(--gray);
   font-size: 1.2rem;
   text-align: center;
   padding-bottom: 3rem;
@@ -332,7 +219,7 @@ ion-icon {
 }
 
 .landing__feature__card {
-  border: 2px solid #3f3f46;
+  border: 1px solid var(--grayLighter);
   border-radius: 4px;
   padding: 0;
   padding: 16px;
@@ -345,10 +232,11 @@ ion-icon {
 .landing__feature__card .title {
   font-weight: bold;
   margin: 12px 0;
+  color: var(--gray);
 }
 
 .landing__feature__card .body {
-  color: #919199;
+  color: var(--grayLight);
 }
 
 .landing__get-started {
@@ -368,16 +256,17 @@ ion-icon {
   font-size: 3rem;
   font-weight: bold;
   line-height: 1;
+  color: var(--black);
 }
 
 .landing__get-started .subtitle {
-  color: #919199;
+  color: var(--gray);
   line-height: 1;
   padding: 1rem 0;
 }
 
 .landing__footer {
-  border-top: 2px solid #3f3f46;
+  border-top: 1px solid var(--grayLighter);
   padding: 1.6rem;
 }
 
@@ -394,7 +283,7 @@ ion-icon {
 }
 
 .landing__footer > p {
-  color: #919199;
+  color: var(--gray);
 }
 
 @media screen and (min-width: 500px) {
@@ -428,6 +317,11 @@ ion-icon {
 }
 
 @media screen and (min-width: 650px) {
+  html,
+  body {
+    font-size: 16px;
+  }
+
   .card-rate__responsive-top {
     display: none;
   }

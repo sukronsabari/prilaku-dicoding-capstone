@@ -20,6 +20,67 @@ import CardRate from "../../src/components/CardRate";
 import Spinner from "../../src/components/Spinner";
 import Alert from "../../src/components/Alert";
 import FormHabbit from "../../src/components/FormHabbit";
+import NavbarLeftBottom from "../../src/components/NavbarLeftBottom";
+import NavbarTop from "../../src/components/NavbarTop";
+import Logo from "../../src/components/Logo";
+import ButtonTextOnly from "../../src/components/ButtonTextOnly";
+import ButtonTextWithIcon from "../../src/components/ButtonTextWithIcon";
+import UserLoginProfile from "../../src/components/UserLoginProfile";
+
+import styles from "./Home.module.scss";
+import ButtonIconOnly from "../../src/components/ButtonIconOnly";
+import Footer from "../../src/components/Footer";
+
+const NavbarTopContent = ({
+  habbitsDateActive,
+  setDataDetailHabbit,
+  setShowModal,
+}) => {
+  const todayDate = new Date();
+
+  return (
+    <>
+      <div className={styles["navbar-top__information"]}>
+        <ButtonTextOnly
+          handleClick={() => {
+            const todayClass = document.querySelector(
+              ".main-calendar .Calendar__day.-today"
+            );
+            const selectedClass = document.querySelector(
+              ".main-calendar .Calendar__day.-selected"
+            );
+
+            const today = todayClass || selectedClass;
+
+            if (today) {
+              today.scrollIntoView({ inline: "center" });
+              today.click();
+            }
+          }}
+        >
+          {todayDate.toLocaleDateString() ==
+          habbitsDateActive.toLocaleDateString()
+            ? "Today"
+            : "Back to Today"}
+        </ButtonTextOnly>
+        <div className="date-active">{formatDate(habbitsDateActive)}</div>
+      </div>
+      <div className={styles["navbar-top__actions"]}>
+        <ButtonIconOnly
+          isCircle={true}
+          handleClick={() => {
+            setDataDetailHabbit(null);
+            setShowModal(true);
+          }}
+          ariaLabel="new habit"
+        >
+          <ion-icon name="add-outline"></ion-icon>
+        </ButtonIconOnly>
+        <UserLoginProfile />
+      </div>
+    </>
+  );
+};
 
 const Home = () => {
   const [showModal, setShowModal] = useState(false);
@@ -35,13 +96,14 @@ const Home = () => {
 
   const getHabbitDataFromFirestore = async () => {
     try {
-      setIsLoading(false);
       const userSigned = JSON.parse(getUserInfo());
-      const q = query(
+
+      const allHabit = query(
         collection(db, "habbits"),
         where("uid", "==", userSigned.user.uid)
       );
-      onSnapshot(q, (querySnapshot) => {
+
+      onSnapshot(allHabit, (querySnapshot) => {
         const snapshots = querySnapshot.docs.map((doc) => ({
           id: doc.id,
           data: doc.data(),
@@ -62,12 +124,12 @@ const Home = () => {
         });
 
         setCompletionRate(
-          (100 * dataFinishedHabbits.length) / snapshots.length
+          Math.round((dataFinishedHabbits.length / snapshots.length) * 100)
         );
-
         setFinishedHabbits(dataFinishedHabbits);
         setRemaindHabbits(dataRemaindHabbits);
         setHabbits(filterDate);
+        setIsLoading(false);
       });
     } catch (err) {
       console.log(err);
@@ -85,7 +147,15 @@ const Home = () => {
   };
 
   return (
-    <Layout>
+    <Layout
+      navbarTopContent={
+        <NavbarTopContent
+          setShowModal={setShowModal}
+          setDataDetailHabbit={setDataDetailHabbit}
+          habbitsDateActive={habbitsDateActive}
+        />
+      }
+    >
       {showModal && (
         <FormHabbit
           setShowModal={setShowModal}
@@ -102,154 +172,80 @@ const Home = () => {
           completionRate={completionRate}
         />
       )}
-      <div className="card-rate__responsive-top my-3">
-        <div className="row">
-          <div className="col-4">
-            <CardRate
-              color="#7F00FF"
-              rateName="Unfinished Habit"
-              rateCount={remaindHabbits.length}
-              message="You can do it!"
-            />
-          </div>
-          <div className="col-4">
-            <CardRate
-              color="#7F00FF"
-              rateName="Habit Finished"
-              rateCount={finishedHabbits.length}
-              message="Trust the process!"
-            />
-          </div>
-          <div className="col-4">
-            <CardRate
-              color="#7F00FF"
-              rateName="Completion Rate"
-              rateCount={`${
-                habbits?.length === 0 ? "0" : Math.round(completionRate)
-              }%`}
-              message="Belive in yourself!"
-            />
-          </div>
-        </div>
-      </div>
-      <div className="calendar-top my-4">
-        <ButtonCustom
-          title="Show Calendar"
-          isFullWidth={true}
-          isIcon={true}
-          iconName="calendar"
-          color="#FF844B"
-          handlePress={() => setIsShowCalendar(!isShowCalendar)}
-        />
-      </div>
-      {isShowCalendar && (
-        <div className="calendar-top mb-4">
-          <Calendar
-            value={formatterDateToObject(habbitsDateActive)}
-            onChange={(selected) =>
-              setHabbitsDateActive(
-                new Date([selected.month, selected.day, selected.year])
-              )
-            }
-            colorPrimary="#F58349"
-            colorPrimaryLight="#FBCEB6"
-            shouldHighlightWeekends
+      <div className={styles["header-content"]}>
+        <div className={styles["header-content__inner"]}>
+          <CalendarComponent
+            habbitsDateActive={habbitsDateActive}
+            setHabbitsDateActive={setHabbitsDateActive}
           />
-        </div>
-      )}
-      <div className="row my-4">
-        <div className="col-12 col-lg-7 w-100">
-          <Header
-            title={formatDate(habbitsDateActive)}
-            imageUrl="https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Joko_Widodo_2019_official_portrait.jpg/1200px-Joko_Widodo_2019_official_portrait.jpg"
-          />
-        </div>
-      </div>
-      <div className="row mb-4">
-        <div className="col-12 col-lg-8 mb-4">
-          <div className="mb-4">
-            <ButtonCustom
-              title="Create New Habit"
-              isIcon={true}
-              size="normal"
-              iconName="add"
-              handlePress={() => {
-                setDataDetailHabbit(null);
-                setShowModal(true);
-              }}
-            />
-          </div>
-          {isLoading ? (
-            <Spinner />
-          ) : (
-            habbits?.map((habbit) => {
-              return (
-                <div className="mt-3 position-relative" key={habbit.id}>
-                  <HabbitCard
-                    title={habbit.data.name}
-                    iconName={habbit.data.icon}
-                    color={habbit.data.color}
-                    setValue={setIsShowDetailUpdate}
-                    setDataDetail={setDataDetailHabbit}
-                    time={habbit.data.time}
-                    data={habbit}
-                    deleteHabbitById={() => deleteHabbit("habbits", habbit.id)}
-                    handleUpdateHabbit={() => updateHabbit(habbit)}
-                    startDate={formatDate(new Date(habbit.data.startDate))}
-                    endDate={formatDate(new Date(habbit.data.endDate))}
-                  />
-                </div>
-              );
-            })
-          )}
-          {habbits?.length === 0 && (
-            <Alert type="danger" message="There is no activity today" />
-          )}
-        </div>
-        <div className="col-12 col-lg-4">
-          <div className="calendar-bottom mb-4">
-            <Heading title="Date" />
-            <Calendar
-              value={formatterDateToObject(habbitsDateActive)}
-              onChange={(selected) =>
-                setHabbitsDateActive(
-                  new Date([selected.month, selected.day, selected.year])
-                )
-              }
-              colorPrimary="#F58349"
-              colorPrimaryLight="#FBCEB6"
-              shouldHighlightWeekends
-            />
-          </div>
-          <div className="card-rate__responsive-bottom">
-            <Heading title="Summary" />
-            <div className="row">
-              <div className="col-6 ">
+          <div className={styles["card-rate"]}>
+            <div className="row gap-5">
+              <div className="col-4">
                 <CardRate
-                  color="#7F00FF"
                   rateName="Unfinished Habit"
                   rateCount={remaindHabbits.length}
-                  message="You can do it!"
                 />
               </div>
-              <div className="col-6 ">
+              <div className="col-4">
                 <CardRate
-                  color="#7F00FF"
+                  color="#58B77A"
                   rateName="Habit Finished"
                   rateCount={finishedHabbits.length}
-                  message="Trust the process!"
                 />
               </div>
-              <div className="col-6 ">
+              <div className="col-6">
                 <CardRate
-                  color="#7F00FF"
+                  color="#ED7946"
                   rateName="Completion Rate"
-                  rateCount={`${
-                    habbits?.length === 0 ? "0" : Math.round(completionRate)
-                  }%`}
-                  message="Belive in yourself!"
+                  rateCount={`${completionRate || 0}%`}
                 />
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className={styles["main-content"]}>
+        <div className={styles["main-content__inner"]}>
+          <div className={styles["content"]}>
+            <h2>HABIT</h2>
+            <div className={styles["habbit-list"]}>
+              {isLoading && <Spinner />}
+              {habbits?.length === 0 && (
+                <Alert type="danger" message="There is no activity today" />
+              )}
+              {!isLoading &&
+                habbits?.map((habbit) => {
+                  return (
+                    <div className="mt-3 position-relative" key={habbit.id}>
+                      <HabbitCard
+                        title={habbit.data.name}
+                        iconName={habbit.data.icon}
+                        color={habbit.data.color}
+                        setValue={setIsShowDetailUpdate}
+                        setDataDetail={setDataDetailHabbit}
+                        time={habbit.data.time}
+                        data={habbit}
+                        deleteHabbitById={() =>
+                          deleteHabbit("habbits", habbit.id)
+                        }
+                        handleUpdateHabbit={() => updateHabbit(habbit)}
+                        startDate={formatDate(new Date(habbit.data.startDate))}
+                        endDate={formatDate(new Date(habbit.data.endDate))}
+                      />
+                    </div>
+                  );
+                })}
+            </div>
+            <div className="mt-4 mb-5 d-flex justify-content-center">
+              <ButtonTextWithIcon
+                icon={<ion-icon name="add-outline"></ion-icon>}
+                handleClick={() => {
+                  setDataDetailHabbit(null);
+                  setShowModal(true);
+                }}
+              >
+                Add Habit
+              </ButtonTextWithIcon>
             </div>
           </div>
         </div>

@@ -15,6 +15,7 @@ const HabbitCard = ({
   time,
   startDate,
   endDate,
+  forHistory,
 }) => {
   const [isShowMoreOptions, setIsShowMoreOptions] = useState(false);
   const [isDone, setIsDone] = useState(data?.data?.isDone);
@@ -36,89 +37,108 @@ const HabbitCard = ({
     }
   };
 
+  const formatShortDate = (date) => date.split(",")[1];
+
   return (
-    <div className="d-flex align-items-center">
-      {!isDone && (
-        <label className={styles.wrapper}>
-          <input
-            className={styles.input}
-            type="checkbox"
-            checked={isDone}
-            onChange={handleUpdateHabbitDone}
-          />
-          <span className={styles.checkmark}></span>
-        </label>
-      )}
+    <div className={styles["habit-item"]}>
+      <label className={styles.wrapper}>
+        <input
+          className={styles.input}
+          type="checkbox"
+          checked={isDone}
+          onChange={handleUpdateHabbitDone}
+        />
+        {/* <ion-icon name="checkmark" className={styles["checkmark"]}></ion-icon> */}
+        <span className={styles.checkmark}></span>
+      </label>
       <div
-        className="w-100 rounded rounded-lg p-4 d-flex align-items-center justify-content-between ms-2"
-        style={{ backgroundColor: isDone ? "#cccccc42" : color }}
+        className={styles["habit-card"]}
+        style={{ backgroundColor: isDone ? "#C3C4C5" : color }}
       >
-        <div className={styles.contentContainer}>
-          <ion-icon
-            name={iconName}
-            style={{ fontSize: 36, marginBottom: 6 }}
-          ></ion-icon>
-          <div className={styles.cardTitle}>
-            <span className={`${styles.link}`} onClick={handleDetailHabbit}>
-              <strong className={isDone && "text-decoration-line-through"}>
-                {title}
-              </strong>
-            </span>
-            <div className={styles.habbitCardInfo}>
-              <div className="d-flex align-items-center opacity-75 me-3 mb-1">
-                <ion-icon
-                  name="calendar-outline"
-                  style={{ fontSize: 16, color: "yellow" }}
-                ></ion-icon>
-                <div className="d-flex items-center">
-                  <span className="mx-2">{startDate}</span>
-                  {startDate !== endDate && (
-                    <span className="mx-2">{endDate}</span>
+        <div className={styles["habit-card__content"]}>
+          <div className={styles["habit-card__icon"]}>
+            <ion-icon name={iconName}></ion-icon>
+          </div>
+          <div className={styles["habit-card__information"]}>
+            <div className={styles["habit-card__text"]}>
+              <div
+                className={styles["habit-card__name"]}
+                onClick={handleDetailHabbit}
+              >
+                <strong
+                  className={isDone ? "text-decoration-line-through" : ""}
+                >
+                  {title}
+                </strong>
+              </div>
+              <div className={styles["habit-card__date"]}>
+                <div className={styles["habit-card__date-info"]}>
+                  {forHistory ? (
+                    <>
+                      <ion-icon
+                        name="calendar"
+                        style={{ fontSize: 16 }}
+                      ></ion-icon>
+                      <div className={styles["habit-card__endDate"]}>
+                        <span style={{ fontSize: "0.9rem" }}>
+                          {formatShortDate(startDate)}{" "}
+                          {startDate != endDate && `- ${formatShortDate(endDate)}`}
+                        </span>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <ion-icon
+                        name={time.icon}
+                        style={{ fontSize: 16 }}
+                      ></ion-icon>
+                      <div className={styles["habit-card__endDate"]}>
+                        <span>{time.name}</span>
+                      </div>
+                    </>
                   )}
                 </div>
               </div>
-              <div className="d-flex align-items-center opacity-75 mb-1">
-                <ion-icon
-                  name={time.icon}
-                  style={{ fontSize: 16, color: "yellow" }}
-                ></ion-icon>
-                <span className="ms-2">{time.name}</span>
-              </div>
             </div>
-          </div>
-        </div>
-        <div
-          className="position-relative"
-          style={{ cursor: "pointer" }}
-          onClick={() => setIsShowMoreOptions(!isShowMoreOptions)}
-        >
-          <ion-icon name="ellipsis-horizontal"></ion-icon>
-          {isShowMoreOptions && (
             <div
-              className={`text-center py-2 px-2 d-flex flex-column ${styles.options}`}
+              className={styles["options-opener"]}
+              style={{ cursor: "pointer" }}
+              onClick={(event) => {
+                event.stopPropagation();
+                setIsShowMoreOptions(() => !isShowMoreOptions);
+              }}
             >
-              <span
-                className={`fw-semibold py-1 ${styles.menuOption}`}
-                onClick={handleDetailHabbit}
-              >
-                Detail
-              </span>
-              <span
-                className={`fw-semibold py-1 ${styles.menuOption}`}
-                onClick={deleteHabbitById}
-              >
-                Delete
-              </span>
-              {!data?.data?.isDone && (
-                <span
-                  className={`fw-semibold py-1 ${styles.menuOption}`}
-                  onClick={handleUpdateHabbit}
+              <div className={styles["options-opener__icon"]}>
+                <ion-icon name="ellipsis-horizontal"></ion-icon>
+              </div>
+              {isShowMoreOptions && (
+                <div
+                  className={`text-center px-2 d-flex flex-column ${styles.options}`}
                 >
-                  Edit
-                </span>
+                  <div
+                    className={`fw-semibold ${styles.menuOption}`}
+                    onClick={handleDetailHabbit}
+                  >
+                    Detail
+                  </div>
+                  <div
+                    className={`fw-semibold ${styles.menuOption}`}
+                    onClick={deleteHabbitById}
+                  >
+                    Delete
+                  </div>
+                  {!data?.data?.isDone && (
+                    <div
+                      className={`fw-semibold ${styles.menuOption}`}
+                      onClick={handleUpdateHabbit}
+                    >
+                      Edit
+                    </div>
+                  )}
+                </div>
               )}
             </div>
-          )}
+          </div>
         </div>
       </div>
     </div>

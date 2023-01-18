@@ -22,7 +22,11 @@ const HomeHeader = () => {
 
   return (
     <div className="landing__header py-4 d-flex align-items-center justify-content-between">
-      <Logo />
+      <Link href="/">
+        <a>
+          <Logo />
+        </a>
+      </Link>
       <div
         className="hamburgerBtn"
         aria-label="open navigation drawer"
@@ -46,7 +50,7 @@ const HomeHeader = () => {
           <li>
             <Link href="/">
               <a
-                style={{ textDecoration: "none", color: "#fff" }}
+                style={{ textDecoration: "none", color: "#3c4043" }}
                 className="active"
               >
                 Home
@@ -55,13 +59,13 @@ const HomeHeader = () => {
           </li>
           <li>
             <Link href="/blog">
-              <a style={{ textDecoration: "none", color: "#fff" }}>Blog</a>
+              <a style={{ textDecoration: "none", color: "#3c4043" }}>Blog</a>
             </Link>
           </li>
           <li>
-            <a style={{ textDecoration: "none", color: "#fff" }} href="#">
-              About
-            </a>
+            <Link href="/about">
+              <a style={{ textDecoration: "none", color: "#3c4043" }}>About</a>
+            </Link>
           </li>
           {user ? (
             <li>

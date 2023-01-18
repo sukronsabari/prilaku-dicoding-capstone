@@ -11,8 +11,8 @@ const Blog = () => {
 
   useEffect(() => {
     axios
-      .get("https://prekuel.com/wp-json/wp/v2/posts/?per_page=5")
-      .then((res) => setBlogs(res.data));
+      .get("https://prekuel.com/wp-json/wp/v2/posts/?category=248")
+      .then((res) => setBlogs(res.data.slice(0, 3)));
   }, []);
 
   return (
@@ -51,7 +51,7 @@ const Blog = () => {
                 <Link href={`/blog/${blog.id}`}>
                   <a
                     className={styles.link}
-                    style={{ textDecoration: "none", color: "#fff" }}
+                    style={{ textDecoration: "none", color: "#3c4043" }}
                   >
                     <p>Continue Reading</p>
                     <Image

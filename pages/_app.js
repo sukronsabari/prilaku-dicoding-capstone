@@ -1,9 +1,8 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-import "react-calendar/dist/Calendar.css";
-import "@hassanmojab/react-modern-calendar-datepicker/lib/DatePicker.css";
 import Head from "next/head";
 
 import "../styles/globals.css";
+import "../styles/calendar.css";
 import AuthProvider from "../src/context/AuthProvider";
 import Script from "next/script";
 
@@ -39,6 +38,7 @@ function MyApp({ Component, pageProps }) {
         <link rel="shortcut icon" href="/favicon.png" />
         <link rel="manifest" href="/manifest.json" />
         <link rel="apple-touch-icon" href="/icon-192x192.png"></link>
+        <meta name="dicoding:email" content="arialghifari99@gmail.com" />
         <title>Prilaku — Managing habits made easy</title>
       </Head>
       <AuthProvider>
